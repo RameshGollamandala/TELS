@@ -1,0 +1,12 @@
+
+DROP TABLE TELS_RCRM_ROW_SOURCE;
+
+CREATE TABLE TELS_RCRM_ROW_SOURCE
+(
+    FILENAME         varchar2(255) NOT NULL,
+    ROW_ID           varchar2(15),
+    BATCHPROCESSDATE date,
+    ORDER_NUMBER     varchar2(30),
+    STATUS_HEADER    varchar2(30),
+    PROVISIONED_DATE varchar2(25)
+);
