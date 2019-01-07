@@ -1,0 +1,71 @@
+--pay period
+SELECT 
+  per.NAME PERIOD_NAME,
+  TO_CHAR(pip.STARTTIME,'YYYY-MM-DD HH24:MI:SS') POSTING_DATE,
+  TO_CHAR(per.STARTDATE,'YYYY-MM-DD HH24:MI:SS') START_DATE,
+  TO_CHAR(per.ENDDATE,'YYYY-MM-DD HH24:MI:SS') END_DATE,
+  tper.YEAR PERIOD_YEAR,
+  tper.WEEK,
+  tper.PERIOD_ID PAY_PERIOD_ID,
+  (pip.PIPELINERUNSEQ-20547673299877888+10000) PAY_RUN_ID,
+  substr(per.NAME,0,3) || '_' || substr(per.NAME,4,2) || TO_CHAR(per.STARTDATE, '_YYYY') PAY_GROUP_NAME,
+  '10000' PAY_GROUP_ID,
+  Count(*) TRANSACTION_COUNT,
+  TO_CHAR(pip.STARTTIME,'YYYY-MM-DD HH24:MI:SS') CreatedDateTime
+FROM 
+  CS_PERIOD@TC_LINK per
+  JOIN CS_PIPELINERUN@TC_LINK pip ON
+    pip.PERIODSEQ = per.PERIODSEQ
+    AND pip.TENANTID = per.TENANTID
+    AND pip.COMMAND = 'PipelineRun'
+    AND pip.STATUS = 'Successful'
+    AND pip.DESCRIPTION LIKE('%stage=Post%')
+  LEFT OUTER JOIN CS_CREDIT@TC_LINK cdt ON
+    cdt.TENANTID = pip.TENANTID
+    AND cdt.PERIODSEQ = pip.PERIODSEQ
+  JOIN TELS_PERIOD tper ON
+    tper.PERIOD_NAME = per.NAME
+  JOIN (SELECT 
+          pipe.PERIODSEQ,
+          MAX(pipe.STARTTIME) STARTTIME
+        FROM CS_PIPELINERUN@TC_LINK pipe
+        WHERE pipe.COMMAND = 'PipelineRun'
+            AND pipe.STATUS = 'Successful'
+            AND pipe.DESCRIPTION LIKE('%stage=Post%')
+        GROUP BY pipe.PERIODSEQ) maxpip ON
+    maxpip.PERIODSEQ = pip.PERIODSEQ
+    AND maxpip.STARTTIME = pip.STARTTIME
+WHERE
+  per.REMOVEDATE = TO_DATE('01012200','DDMMYYYY')
+  AND per.TENANTID = 'TELS'
+GROUP BY
+  per.NAME,
+  per.STARTDATE,
+  TO_CHAR(pip.STARTTIME,'YYYY-MM-DD HH24:MI:SS'),
+  TO_CHAR(per.STARTDATE,'YYYY-MM-DD HH24:MI:SS'),
+  TO_CHAR(per.ENDDATE,'YYYY-MM-DD HH24:MI:SS'),
+  tper.YEAR,
+  tper.WEEK,
+  tper.PERIOD_ID,
+  (pip.PIPELINERUNSEQ-20547673299877888+10000),
+  substr(per.NAME,0,3) || '_' || substr(per.NAME,4,2) || TO_CHAR(per.STARTDATE, '_YYYY'),
+  '10000',
+  TO_CHAR(pip.STARTTIME,'YYYY-MM-DD HH24:MI:SS')
+ORDER BY
+  per.STARTDATE
+;
+
+SELECT * FROM TELS_PERIOD;
+
+select max(pipelinerunseq), max(pipelinerunseq)-1228 from CS_PIPELINERUN@TC_LINK order by pipelinerunseq asc;
+SELECT * FROM CS_SEQUENCEGENERATOR@TC_LINK;
+SELECT Count(*) FROM CS_PIPELINERUN@TC_LINK;
+
+SELECT 
+  pip.PERIODSEQ,
+  MAX(pip.STARTTIME)
+FROM CS_PIPELINERUN@TC_LINK pip
+WHERE pip.COMMAND = 'PipelineRun'
+    AND pip.STATUS = 'Successful'
+    AND pip.DESCRIPTION LIKE('%stage=Post%')
+GROUP BY pip.PERIODSEQ;

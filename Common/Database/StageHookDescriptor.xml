@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE stagehooks SYSTEM "../classpath/properties/StageHookDescriptor.dtd">
+<stagehooks version="1.0">
+<stagehook stagename="Pay">
+    <poststage type="storedproc">
+        <command>TELSEXT.ProcedureName</command>
+         <pipelineArgs>
+             <name>period</name>
+             <name>calendarSeq</name>
+             <name>processingUnitSeq</name>
+         </pipelineArgs>
+    </poststage>
+</stagehook>
+</stagehooks>
