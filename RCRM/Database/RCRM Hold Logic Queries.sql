@@ -27,7 +27,7 @@ WITH MOLI AS(
           WHERE ps.ORDER_NUMBER = d.ORDER_NUMBER
             AND ps.PROMOTION_INTEGRATION_ID = d.PROMOTION_INTEGRATION_ID
             AND ps.NGB_PROD_TYPE = 'MOC'
-            AND ps.COMMISSION_PRODUCT_TYPE <> 'Commissions Standalone')
+            AND ps.COMMISSION_PRODUCT_TYPE = 'Commissions Standalone')
       AND NOT EXISTS ( 
           SELECT 1 FROM TELS_PRESTAGE_RCRM ps
           WHERE ps.ORDER_NUMBER = d.ORDER_NUMBER
