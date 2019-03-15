@@ -1,0 +1,80 @@
+DROP TABLE TELS_CWP_OPPORTUNITY_ITEM CASCADE CONSTRAINTS PURGE
+/
+
+CREATE TABLE TELS_CWP_OPPORTUNITY_ITEM
+(
+  FILENAME                       VARCHAR2(255 BYTE) NOT NULL,
+  BATCHPROCESSDATE               DATE           NOT NULL,
+  RECORDNUMBER                   NUMBER(15)     NOT NULL,
+  IS_FILTERED                    NUMBER(1)      NOT NULL,
+  B2B_KEY                        VARCHAR2(255 BYTE),
+  B2B_INSERT_TIMESTAMP           DATE,
+  B2B_BATCH_ID                   VARCHAR2(255 BYTE),
+  SOURCE_SYSTEM_KEY              VARCHAR2(255 BYTE),
+  SOURCE_SYSTEM_OPPORTUNITY_KEY  VARCHAR2(255 BYTE),
+  OPPITEM_NAME                   VARCHAR2(255 BYTE),
+  QUANTITY                       INTEGER,
+  TOTAL_PRICE                    NUMBER(25,10),
+  UNIT_PRICE                     NUMBER(25,10),
+  LIST_PRICE                     NUMBER(25,10),
+  DESCRIPTION                    VARCHAR2(255 BYTE),
+  IS_DELETED                     INTEGER,
+  ACQUISITION_REVENUE            NUMBER(25,10),
+  AVG_ACQUISITION_REVENUE        NUMBER(25,10),
+  CHANNEL                        VARCHAR2(255 BYTE),
+  COMPETITOR                     VARCHAR2(255 BYTE),
+  CONTRACT_TERMS                 INTEGER,
+  CURRENT_REVENUE                NUMBER(25,10),
+  DEALER                         VARCHAR2(255 BYTE),
+  DOMAIN                         VARCHAR2(255 BYTE),
+  INCREMENTAL_REVENUE            NUMBER(25,10),
+  NEW_INCOME_REVENUE             NUMBER(25,10),
+  ONCE_OFF_REVENUE               NUMBER(25,10),
+  PRODUCT_CODE                   VARCHAR2(255 BYTE),
+  PRODUCT_NAME                   VARCHAR2(255 BYTE),
+  PRODUCT_STATUS                 VARCHAR2(255 BYTE),
+  RENEWAL_REVENUE                NUMBER(25,10),
+  SRM                            NUMBER(25,10),
+  TOTAL_CUSTOM_PRICE             NUMBER(25,10),
+  PRODUCT_FAMILY                 VARCHAR2(255 BYTE),
+  PRODUCT_GROUP                  VARCHAR2(255 BYTE),
+  ULTIMATE_PRODUCT               VARCHAR2(255 BYTE)
+)
+TABLESPACE TELS_SOURCES
+PCTUSED    0
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING
+/
+
+
+CREATE UNIQUE INDEX TELS_OPPORTUNITY_ITEM_PK ON TELS_CWP_OPPORTUNITY_ITEM
+(FILENAME, BATCHPROCESSDATE, RECORDNUMBER)
+LOGGING
+TABLESPACE TELS_SOURCES
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+           )
+NOPARALLEL
+/
